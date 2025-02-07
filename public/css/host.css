@@ -1,0 +1,154 @@
+/* ======= Reseta alguns estilos padrões ======= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: "Raleway", sans-serif;
+}
+
+/* ======= OPÇÃO 1: Fundo verde sólido ======= */
+body {
+  background-color: #0f4f08; /* Verde escuro (ajuste conforme desejar) */
+  background: url("../../img/fundo-floresta.jpg") no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  font-family: "Raleway";
+  align-items: center;
+  justify-content: center;
+}
+
+/* ======= OPÇÃO 2: Fundo com imagem ======= */
+/*
+body {
+  background: url("../../img/fundo-floresta.jpg") no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+*/
+
+/* ======= Container central (cartão) ======= */
+.container {
+  position: relative; /* Para posicionar o botão "cancelar" dentro */
+  background-color: #2c1d13; /* Marrom escuro */
+  border: 4px solid #ff7d1c; /* Borda laranja */
+  border-radius: 20px;
+  width: 90%;
+  min-width: 700px;
+  max-width: 1080px;
+  min-height: 70%;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* ======= Botão "cancelar" (topo esquerdo) ======= */
+.btn-cancel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #bfa46a; /* Tom de bege/amarelado (ajuste conforme layout) */
+  color: #ffffff;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 18px;
+  font-family: inherit;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+.btn-cancel:hover {
+  opacity: 0.9;
+}
+
+/* ======= Título principal ======= */
+.subtitle {
+  font-size: 40px;
+  font-weight: 700;
+  color: #d9c2a3; /* Pode ajustar para branco (#fff) se preferir maior contraste */
+  margin-bottom: 15px;
+  margin-top: 40px; /* Para ficar abaixo do botão cancelar */
+}
+
+/* ======= Box do código (fundo bege, texto marrom escuro) ======= */
+.code-box {
+  display: inline-block;
+  background-color: #d9c2a3;
+  color: #2c1d13; /* marrom escuro */
+  font-weight: 700;
+  padding: 8px 16px;
+  font-size: 40px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* ======= Caixa da textarea ======= */
+.textarea-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* ======= Textarea (lista de jogadores) ======= */
+.textarea-box textarea {
+  width: 90%;
+  max-width: 90%;
+  height: 300px; /* Ajuste se quiser maior/menor */
+  border: none;
+  border-radius: 8px;
+  background-color: #d5c498; /* Bege */
+  font-size: 24px;
+  font-family: "Raleway", sans-serif;
+  color: #2c1d13;
+  padding: 10px;
+  resize: none;
+  outline: none;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* ======= Botão "Começar jogo" ======= */
+.btn-enter {
+  background-color: #ff7d1c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: inherit;
+  padding: 12px 30px;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3), inset 0 -2px 0 #915100; /* sombreado interno */
+}
+.btn-enter:hover {
+  background-color: #ffa64d;
+}
+
+/* ======= Responsividade adicional ======= */
+@media (max-width: 480px) {
+  .btn-cancel {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+  .subtitle {
+    font-size: 28px;
+  }
+  .code-box {
+    font-size: 24px;
+  }
+  .textarea-box textarea {
+    width: 90%;
+    height: 250px;
+  }
+  .btn-enter {
+    width: 80%;
+  }
+}

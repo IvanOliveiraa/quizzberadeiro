@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trilha Beradeira - Entrar na Sala</title>
+    <!-- Importa o CSS externo -->
+    <link rel="stylesheet" href="css/index.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Raleway&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Container central -->
+    <div class="container">
+      <!-- Caso tenha a imagem da logo, use a tag <img>. Ajuste o src para o caminho real no seu projeto -->
+      <img
+        src="./img/logo-trilha-beradeira.png"
+        alt="Logo Trilha Beradeira"
+        class="logo"
+      />
+
+      <!-- Se preferir um texto ao invés da imagem, comente a linha acima e descomente a linha abaixo -->
+      <!-- <div class="logo-text">TRILHA BERADEIRA</div> -->
+
+      <div class="subtitle">Entrar em uma sala</div>
+
+      <form action="/player/">
+        <div class="form-field">
+          <input
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Digite Seu Nome"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <input
+            type="number"
+            name="pin"
+            id="pin"
+            placeholder="Digite o código da sala"
+            required
+          />
+        </div>
+
+        <button id="joinButton" class="btn-enter">Entrar</button>
+      </form>
+      <center>
+        <a href="/create/" id="host">Clique aqui para Criar uma Sala</a>
+      </center>
+    </div>
+  </body>
+</html>

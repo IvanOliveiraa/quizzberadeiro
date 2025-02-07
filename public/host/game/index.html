@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quiz Beradeiro</title>
+    <link rel="stylesheet" href="../../css/hostGameView.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Raleway"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Tajawal"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Container central (cartão) -->
+    <div class="container">
+      <div class="topinfo">
+        <h4 id="questionNum">Questão 1 / x</h4>
+        <h3 id="timerText">Tempo Restante:<span id="num"> 20</span></h3>
+        <h4 id="playersAnswered">Respostas Coletadas: 0 / x</h4>
+        <div id="btn-cover">
+          <button onclick="nextQuestion()" id="nextQButton">Avançar</button>
+        </div>
+      </div>
+
+      <!-- Área para as cores (quadrados) – se necessário, agrupe-os -->
+      <div class="squares">
+        <div class="square" id="square1"></div>
+        <div class="square" id="square2"></div>
+        <div class="square" id="square3"></div>
+        <div class="square" id="square4"></div>
+      </div>
+      <div class="card-question">
+        <h2 id="question">Questão</h2>
+      </div>
+      <div class="card-answer">
+        <h3 id="answer1">Alternativa</h3>
+        <br />
+        <h3 id="answer2">Alternativa</h3>
+        <br />
+        <h3 id="answer3">Alternativa</h3>
+        <br />
+        <h3 id="answer4">Alternativa</h3>
+      </div>
+      <br />
+      <div>
+        <h2 id="winnerTitle">Ranking</h2>
+        <h3 id="winner1">1.</h3>
+        <h3 id="winner2">2.</h3>
+        <h3 id="winner3">3.</h3>
+        <h3 id="winner4">4.</h3>
+        <h3 id="winner5">5.</h3>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../socket.io/socket.io.js"></script>
+    <script src="../../js/libs/jqueryLibrary.js"></script>
+    <script src="../../js/libs/deparam.js"></script>
+    <script src="../../js/hostGame.js"></script>
+  </body>
+</html>

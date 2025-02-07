@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quiz Beradeiro</title>
+    <!-- Ajuste o caminho do CSS conforme a organização do seu projeto -->
+    <link rel="stylesheet" href="../css/host.css" />
+    <!-- Importa as fontes desejadas -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Raleway:400,600,700,900"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Tajawal:400,700"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Cartão central -->
+    <div class="container">
+      <!-- Botão cancelar (topo esquerdo) -->
+      <button class="btn-cancel" id="cancel" onclick="endGame()">
+        cancelar
+      </button>
+
+      <!-- Título principal -->
+      <h2 class="subtitle">Código da Sala:</h2>
+
+      <!-- Box do código -->
+      <div class="code-box" id="gamePinText">3780</div>
+
+      <!-- Área para exibir jogadores (textarea) -->
+      <div class="textarea-box">
+        <textarea id="players" readonly></textarea>
+      </div>
+
+      <!-- Botão de começar -->
+      <button class="btn-enter" id="start" onclick="startGame()">
+        Começar jogo
+      </button>
+    </div>
+
+    <!-- Scripts (ajuste caminhos conforme seu projeto) -->
+    <script src="../socket.io/socket.io.js"></script>
+    <script src="../js/libs/jqueryLibrary.js"></script>
+    <script src="../js/libs/deparam.js"></script>
+    <script src="../js/host.js"></script>
+  </body>
+</html>

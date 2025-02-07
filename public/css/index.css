@@ -1,0 +1,126 @@
+/* ======= Reseta alguns estilos padrões ======= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: "Raleway", sans-serif; /* Ajuste conforme a fonte que preferir */
+}
+body a {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ======= Fundo com imagem da floresta ======= */
+body {
+  /* Substitua pelo caminho da sua imagem de fundo */
+  background: url("../../img/fundo-floresta.jpg") no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  font-family: "Raleway";
+  align-items: center;
+  justify-content: center;
+}
+
+/* ======= Container central (cartão) ======= */
+.container {
+  background-color: rgba(44, 29, 19, 0.95); /* Tom de marrom escuro */
+  border: 4px solid #ff7d1c; /* Borda laranja */
+  border-radius: 20px;
+  width: 90%;
+  max-width: 720px;
+  min-height: 70%;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Sombra para destaque */
+}
+
+/* ======= Logo ou título ======= */
+.logo {
+  max-width: 80%;
+  height: auto;
+  margin: 0 auto 20px;
+  display: block;
+}
+
+/* Exemplo caso não tenha a imagem da logo e queira usar apenas texto */
+.logo-text {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffae4d;
+  margin-bottom: 10px;
+}
+
+/* ======= Texto de subtítulo ======= */
+.subtitle {
+  font-size: 40px;
+  font-weight: 900;
+  color: #fff;
+  margin-top: -40px;
+  margin-bottom: 20px;
+}
+
+/* ======= Campos de input ======= */
+.form-field {
+  margin-bottom: 15px;
+}
+
+.form-field input {
+  width: 80%;
+  padding: 12px;
+  font-family: "Raleway";
+  border: none;
+  border-radius: 8px;
+  background-color: #d9c2a3; /* Tom de bege */
+  font-size: 32px;
+  outline: 2px solid #ff7d1c;
+  color: rgba(44, 29, 19, 0.97);
+  font-weight: 600;
+  text-align: center;
+  font-weight: medium;
+}
+
+.form-field input::placeholder {
+  font-weight: lighter;
+  color: rgba(44, 29, 19, 0.5); /* Placeholder mais suave */
+}
+
+/* ======= Botão "Entrar" ======= */
+.btn-enter {
+  width: 80%;
+  font-weight: 900;
+  background-color: #ff7d1c;
+  font-family: "Raleway";
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 32px;
+  padding: 12px;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-bottom: 10px;
+
+  -webkit-box-shadow: inset 0 1px 0 #ffe5c4, inset 0 -3px 0 #915100;
+  -moz-box-shadow: inset 0 1px 0 #ffe5c4, inset 0 -3px 0 #915100;
+  box-shadow: inset 0 1px 0 #ffe5c4, inset 0 -3px 0 #915100;
+}
+
+.btn-enter:hover {
+  background-color: #ffa64d; /* Laranja mais claro no hover */
+}
+
+/* ======= Responsividade adicional (por exemplo, telas menores) ======= */
+@media (max-width: 500px) {
+  .container {
+    width: 95%;
+    padding: 15px;
+  }
+  .form-field input,
+  .btn-enter {
+    width: 90%;
+  }
+}
