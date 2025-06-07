@@ -84,5 +84,6 @@ quizzberadeiro/
 2. Clone o repositório
 3. Instale as dependências: `npm install`
 4. Configure a conexão com o MongoDB no arquivo `.env`
-5. Inicie o servidor: `npm start`
+5. Inicie o servidor: ` node server/server.js`
+
 6. Acesse a aplicação em: `http://localhost:3001`

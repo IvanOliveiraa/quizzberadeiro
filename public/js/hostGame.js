@@ -98,14 +98,14 @@ socket.on('questionOver', function (playerData, correct) {
         } else if (playerData[i].gameData.answer == 4) {
             answer4 += 1;
         }
-        total += 1;  // Conta o total de respostas
+        total += 1; // Conta o total de respostas
     }
 
     // Converte as contagens em porcentagens para exibição do gráfico
-    answer1 = answer1 / total * 100;
-    answer2 = answer2 / total * 100;
-    answer3 = answer3 / total * 100;
-    answer4 = answer4 / total * 100;
+    answer1 = (answer1 / total) * 100;
+    answer2 = (answer2 / total) * 100;
+    answer3 = (answer3 / total) * 100;
+    answer4 = (answer4 / total) * 100;
 
     // Exibe os elementos gráficos (barras) que mostram a porcentagem de respostas
     document.getElementById('square1').style.display = "inline-block";
@@ -122,6 +122,32 @@ socket.on('questionOver', function (playerData, correct) {
     // Exibe o botão para avançar para a próxima pergunta
     document.getElementById('btn-cover').style.display = "block";
     document.getElementById('nextQButton').style.display = "block";
+
+    // Exibir ranking após cada rodada
+    if (Array.isArray(playerData)) {
+        // Ordena por score decrescente
+        playerData.sort(function (a, b) {
+            return b.gameData.score - a.gameData.score;
+        });
+
+        // Monta o HTML do ranking
+        var rankingList = document.getElementById('rankingList');
+        rankingList.innerHTML = '';
+        playerData.forEach(function (player, idx) {
+            var li = document.createElement('li');
+            li.textContent = (idx + 1) + '. ' + player.name + ': ' + player.gameData.score + ' pontos';
+            rankingList.appendChild(li);
+        });
+
+        // Exibe o modal
+        var rankingModal = document.getElementById('rankingModal');
+        rankingModal.style.display = 'block';
+
+        // Esconde o modal após 5 segundos
+        setTimeout(function () {
+            rankingModal.style.display = 'none';
+        }, 5000);
+    }
 });
 
 // Função que é chamada quando o host clica no botão para a próxima pergunta

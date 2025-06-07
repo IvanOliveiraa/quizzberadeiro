@@ -97,6 +97,7 @@ io.on('connection', (socket) => {
                     var answer3 = res[0].questions[0].answers[2];
                     var answer4 = res[0].questions[0].answers[3];
                     var correctAnswer = res[0].questions[0].correct;
+                    var explanationQuestion = res[0].questions[0].explanation;
 
                     socket.emit('gameQuestions', {
                         q1: question,
@@ -105,6 +106,7 @@ io.on('connection', (socket) => {
                         a3: answer3,
                         a4: answer4,
                         correct: correctAnswer,
+                        explanation: explanationQuestion,
                         playersInGame: playerData.length
                     });
                     db.close();
