@@ -60,36 +60,7 @@ socket.on('questionOver', function (playerData) {
     document.getElementById('answer4').style.visibility = "hidden";
     socket.emit('getScore');
 
-    // Exibir ranking após cada rodada
-    if (Array.isArray(playerData)) {
-        // Ordena por score decrescente
-        playerData.sort(function (a, b) {
-            return b.gameData.score - a.gameData.score;
-        });
-
-        // Monta o HTML do ranking
-        var rankingList = document.getElementById('rankingList');
-        rankingList.innerHTML = '';
-        playerData.forEach(function (player, idx) {
-            var li = document.createElement('li');
-            li.textContent = (idx + 1) + '. ' + player.name + ': ' + player.gameData.score + ' pontos';
-            // Destaca o próprio jogador
-            if (player.playerId === socket.id) {
-                li.style.fontWeight = 'bold';
-                li.style.color = '#1a7f37';
-            }
-            rankingList.appendChild(li);
-        });
-
-        // Exibe o modal
-        var rankingModal = document.getElementById('rankingModal');
-        rankingModal.style.display = 'block';
-
-        // Esconde o modal após 5 segundos
-        setTimeout(function () {
-            rankingModal.style.display = 'none';
-        }, 5000);
-    }
+    // Não exibir ranking para o player entre as perguntas
 });
 
 socket.on('newScore', function (data) {
