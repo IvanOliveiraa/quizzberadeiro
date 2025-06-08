@@ -107,10 +107,13 @@ io.on('connection', (socket) => {
                         a4: answer4,
                         correct: correctAnswer,
                         explanation: explanationQuestion,
-                        playersInGame: playerData.length
+                        playersInGame: playerData.length,
+                        currentQuestionNumber: game.gameData.question,
+                        totalQuestions: res[0].questions.length
                     });
                     db.close();
                 });
+                db.close();
             });
 
 
@@ -335,6 +338,7 @@ io.on('connection', (socket) => {
                     var answer3 = res[0].questions[questionNum].answers[2];
                     var answer4 = res[0].questions[questionNum].answers[3];
                     var correctAnswer = res[0].questions[questionNum].correct;
+                    var explanationQuestion = res[0].questions[questionNum].explanation;
 
                     socket.emit('gameQuestions', {
                         q1: question,
@@ -343,7 +347,10 @@ io.on('connection', (socket) => {
                         a3: answer3,
                         a4: answer4,
                         correct: correctAnswer,
-                        playersInGame: playerData.length
+                        explanation: explanationQuestion,
+                        playersInGame: playerData.length,
+                        currentQuestionNumber: game.gameData.question,
+                        totalQuestions: res[0].questions.length
                     });
                     db.close();
                 } else {

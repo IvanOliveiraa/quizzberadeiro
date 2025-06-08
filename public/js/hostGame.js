@@ -9,6 +9,7 @@ var time = 20;  // Tempo inicial (em segundos) para cada pergunta
 var showState = 'showingQuestion'; // Estado para controlar exibição: 'showingQuestion', 'showingAnswer', 'showingRanking'
 var playerDataGlobal = []; // Guarda os dados dos jogadores para uso entre estados
 var currentCorrectAnswer = 0; // Guarda a resposta correta para exibir na tela de resposta
+var currentExplanation = ""; // Guarda o explanation da pergunta atual
 
 // Quando o host se conecta ao servidor
 socket.on('connect', function () {
@@ -25,6 +26,13 @@ socket.on('gameQuestions', function (data) {
     showState = 'showingQuestion';
     playerDataGlobal = [];
     currentCorrectAnswer = 0;
+    currentExplanation = data.explanation || "";
+    document.getElementById('explanation').innerHTML = "";
+
+    // Atualiza o número da questão e total de questões
+    if (data.currentQuestionNumber && data.totalQuestions) {
+        document.getElementById('questionNum').innerHTML = "Questão " + data.currentQuestionNumber + " / " + data.totalQuestions;
+    }
 
     // Restaura a interface para mostrar pergunta e respostas
     var cardQuestion = document.querySelector('.card-question');
@@ -50,30 +58,34 @@ socket.on('gameQuestions', function (data) {
     document.getElementById('answer4').innerHTML = data.a4;
 
     // Exibe o número de jogadores que responderam e o total
-    document.getElementById('playersAnswered').innerHTML = "Respostas coletadas: 0/ " + data.playersInGame;
+    document.getElementById('playersAnswered').style.display = "none";
 
     // Exibe elementos de resposta e temporizador
-    document.getElementById('playersAnswered').style.display = "block";
-    document.getElementById('timerText').style.display = "block";
+    document.getElementById('playersAnswered').style.display = "none";
+    document.getElementById('timerText').style.display = "none";
 
     // Oculta o botão avançar e as barras de porcentagem
     document.getElementById('btn-cover').style.display = "none";
     document.getElementById('nextQButton').style.display = "none";
-    document.getElementById('square1').style.display = "none";
-    document.getElementById('square2').style.display = "none";
-    document.getElementById('square3').style.display = "none";
-    document.getElementById('square4').style.display = "none";
+
+    // Reset e oculta as barras até todos os resultados serem coletados
+    ['square1', 'square2', 'square3', 'square4'].forEach(function (id) {
+        var el = document.getElementById(id);
+        el.style.display = "none";
+        el.style.height = "0px";
+    });
 
     updateTimer();
 });
 
 // Atualiza a exibição de quantos jogadores já responderam a pergunta
 socket.on('updatePlayersAnswered', function (data) {
-    document.getElementById('playersAnswered').innerHTML = "Respostas coletadas:" + data.playersAnswered + " / " + data.playersInGame;
+    document.getElementById('playersAnswered').style.display = "none";
 });
 
 // Quando o tempo da pergunta acaba ou a pergunta é finalizada
 socket.on('questionOver', function (playerData, correct) {
+    console.log('questionOver event triggered', playerData, correct);
     clearInterval(timer);
     playerDataGlobal = playerData;
     currentCorrectAnswer = correct;
@@ -84,12 +96,13 @@ socket.on('questionOver', function (playerData, correct) {
     document.getElementById('playersAnswered').style.display = "none";
     document.getElementById('timerText').style.display = "none";
 
-    // Realça a resposta correta
+    // Realça a resposta correta e aplica um filtro de escala de cinza nas demais
     if (correct == 1) {
         document.getElementById('answer2').style.filter = "grayscale(50%)";
         document.getElementById('answer3').style.filter = "grayscale(50%)";
         document.getElementById('answer4').style.filter = "grayscale(50%)";
         var current = document.getElementById('answer1').innerHTML;
+        // Adiciona um ícone de check (✓) antes da resposta correta
         document.getElementById('answer1').innerHTML = "&#10004" + " " + current;
     } else if (correct == 2) {
         document.getElementById('answer1').style.filter = "grayscale(50%)";
@@ -111,11 +124,60 @@ socket.on('questionOver', function (playerData, correct) {
         document.getElementById('answer4').innerHTML = "&#10004" + " " + current;
     }
 
-    // Exibe as barras de porcentagem
+    // Inicializa contadores para cada resposta e total
+    var answer1 = 0, answer2 = 0, answer3 = 0, answer4 = 0, total = 0;
+
+    // Percorre os dados dos jogadores para contabilizar as respostas de cada alternativa
+    for (var i = 0; i < playerData.length; i++) {
+        if (playerData[i].gameData.answer == 1) {
+            answer1 += 1;
+        } else if (playerData[i].gameData.answer == 2) {
+            answer2 += 1;
+        } else if (playerData[i].gameData.answer == 3) {
+            answer3 += 1;
+        } else if (playerData[i].gameData.answer == 4) {
+            answer4 += 1;
+        }
+        total += 1;  // Conta o total de respostas
+    }
+    // Captura número bruto de respostas para exibir dentro das barras
+    var raw1 = answer1, raw2 = answer2, raw3 = answer3, raw4 = answer4;
+
+    // Ajusta as barras a um máximo de 200px para melhor visualização
+    if (total > 0) {
+        var barMax = 200;
+        answer1 = (answer1 / total) * barMax;
+        answer2 = (answer2 / total) * barMax;
+        answer3 = (answer3 / total) * barMax;
+        answer4 = (answer4 / total) * barMax;
+    } else {
+        answer1 = 0;
+        answer2 = 0;
+        answer3 = 0;
+        answer4 = 0;
+    }
+
+    // Exibe os elementos gráficos (barras)
     document.getElementById('square1').style.display = "inline-block";
     document.getElementById('square2').style.display = "inline-block";
     document.getElementById('square3').style.display = "inline-block";
     document.getElementById('square4').style.display = "inline-block";
+
+    // Define a altura de cada barra em pixels
+    document.getElementById('square1').style.height = answer1 + "px";
+    document.getElementById('square1').style.width = "50px";
+    document.getElementById('square2').style.height = answer2 + "px";
+    document.getElementById('square2').style.width = "50px";
+    document.getElementById('square3').style.height = answer3 + "px";
+    document.getElementById('square3').style.width = "50px";
+    document.getElementById('square4').style.height = answer4 + "px";
+    document.getElementById('square4').style.width = "50px";
+
+    // Exibe número bruto dentro das barras
+    document.getElementById('square1').textContent = raw1;
+    document.getElementById('square2').textContent = raw2;
+    document.getElementById('square3').textContent = raw3;
+    document.getElementById('square4').textContent = raw4;
 
     // Exibe o botão avançar
     document.getElementById('btn-cover').style.display = "block";
@@ -157,6 +219,11 @@ function nextQuestion() {
             ol.appendChild(li);
         });
 
+        // Atualiza o explanation dinâmico com delay para garantir renderização
+        setTimeout(function () {
+            document.getElementById('explanation').innerHTML = currentExplanation;
+        }, 0);
+
         // Atualiza botão avançar
         document.getElementById('btn-cover').style.display = 'block';
         document.getElementById('nextQButton').style.display = 'inline-block';
@@ -167,6 +234,9 @@ function nextQuestion() {
         // Remove ranking
         var cardQuestion = document.querySelector('.card-question');
         cardQuestion.innerHTML = '';
+
+        // Limpa o explanation ao exibir nova pergunta
+        document.getElementById('explanation').innerHTML = "";
 
         // Exibe novamente elementos de contagem e temporizador
         document.getElementById('playersAnswered').style.display = "block";
@@ -207,21 +277,41 @@ socket.on('GameOver', function (data) {
     document.getElementById('answer4').style.display = "none";
 
     document.getElementById('timerText').innerHTML = "";
-    document.getElementById('question').innerHTML = "A trilha chegou ao fim!";
-    document.getElementById('playersAnswered').innerHTML = "";
+    document.getElementById('questionNum').innerHTML = "";
 
-    document.getElementById('winner1').style.display = "block";
-    document.getElementById('winner2').style.display = "block";
-    document.getElementById('winner3').style.display = "block";
-    document.getElementById('winner4').style.display = "block";
-    document.getElementById('winner5').style.display = "block";
-    document.getElementById('winnerTitle').style.display = "block";
+    // Clear previous ranking if any
+    var cardQuestion = document.querySelector('.card-question');
+    cardQuestion.innerHTML = '<h1 style="text-align:center; margin-bottom: 20px;">A trilha chegou ao fim!</h1><h3>Ranking Final</h3><ol style="padding-left: 20px;"></ol>';
+    var ol = cardQuestion.querySelector('ol');
+    var winners = [data.num1, data.num2, data.num3, data.num4, data.num5];
+    winners.forEach(function (winner, idx) {
+        if (winner && winner.trim() !== "") {
+            var li = document.createElement('li');
+            li.textContent = (idx + 1) + '. ' + winner;
+            ol.appendChild(li);
+        }
+    });
 
-    document.getElementById('winner1').innerHTML = "1. " + data.num1;
-    document.getElementById('winner2').innerHTML = "2. " + data.num2;
-    document.getElementById('winner3').innerHTML = "3. " + data.num3;
-    document.getElementById('winner4').innerHTML = "4. " + data.num4;
-    document.getElementById('winner5').innerHTML = "5. " + data.num5;
+    // Create and append the "Voltar para o Início" button
+    var backButton = document.createElement('button');
+    backButton.textContent = "Voltar para o Início";
+    backButton.style.backgroundColor = "#8B4513"; // brown color
+    backButton.style.color = "white";
+    backButton.style.border = "none";
+    backButton.style.padding = "10px 20px";
+    backButton.style.fontSize = "16px";
+    backButton.style.borderRadius = "5px";
+    backButton.style.cursor = "pointer";
+    backButton.style.display = "block";
+    backButton.style.margin = "20px auto 0 auto";
+    backButton.onclick = function () {
+        window.location.href = "../../"; // Adjust path as needed to go back to home
+    };
+    cardQuestion.appendChild(backButton);
+
+    // Hide next question button and cover
+    document.getElementById('btn-cover').style.display = "none";
+    document.getElementById('nextQButton').style.display = "none";
 });
 
 // Evento que responde à requisição de tempo por parte de um jogador

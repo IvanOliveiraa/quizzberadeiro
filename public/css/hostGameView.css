@@ -97,14 +97,27 @@ body {
 /* Quadrados (squares) – se forem usados para indicar cores ou outro propósito */
 .square {
   border: none;
-  padding: 15px 32px;
-  text-align: center;
+  padding: 0;
   text-decoration: none;
-  display: none; /* Inicialmente ocultos; altere conforme a lógica */
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   font-size: 20px;
   margin: 4px 2px;
-  width: 70px;
+  width: 50px;
   height: 0px;
+  transition: height 0.5s ease;
+  color: #fff;
+  font-weight: bold;
+}
+
+.squares {
+  min-height: 100px; /* Garante uma altura mínima para o container */
+  display: flex; /* Usa flexbox para alinhar as barras */
+  justify-content: center; /* Centraliza as barras horizontalmente */
+  align-items: flex-end; /* Alinha as barras na parte inferior do container */
+  width: 90%;
+  margin: 0 auto; /* Centraliza o container */
 }
 
 #square1 {
