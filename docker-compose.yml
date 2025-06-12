@@ -11,7 +11,8 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.trilha.rule=Host(`trilha.sparkautomacoes.com.br`)"
-        - "traefik.http.routers.trilha.entrypoints=web"
+        - "traefik.http.routers.trilha.entrypoints=websecure"
+        - "traefik.http.routers.trilha.tls.certresolver=letsencrypt"
         - "traefik.http.services.trilha.loadbalancer.server.port=80"
     networks:
       - network_public
