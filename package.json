@@ -1,7 +1,7 @@
 {
-  "name": "kahootclone",
+  "name": "Trilha beradeira",
   "version": "1.0.0",
-  "description": "A kahoot website clone",
+  "description": "trilha beradeira",
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",

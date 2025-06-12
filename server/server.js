@@ -26,8 +26,8 @@ var url = "mongodb+srv://root:senha@cluster0.ploxd.mongodb.net/?retryWrites=true
 app.use(express.static(publicPath));
 
 //Starting server on port 3000
-server.listen(3001, () => {
-    console.log("Server started on port 3001");
+server.listen(80, () => {
+    console.log("Server started on port 80");
 });
 
 //When a connection to server is made from client
