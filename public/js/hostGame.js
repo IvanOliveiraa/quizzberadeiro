@@ -182,6 +182,14 @@ socket.on('questionOver', function (playerData, correct) {
     document.getElementById('square3').textContent = raw3;
     document.getElementById('square4').textContent = raw4;
 
+    // Mostra o card de explicação se houver conteúdo
+    if (currentExplanation && currentExplanation.trim() !== "") {
+        document.getElementById('explanationCard').style.display = 'block';
+        document.getElementById('explanation').innerHTML = currentExplanation;
+    } else {
+        document.getElementById('explanationCard').style.display = 'none';
+    }
+
     // Exibe o botão avançar
     document.getElementById('btn-cover').style.display = "block";
     document.getElementById('nextQButton').style.display = "inline-block";
@@ -209,6 +217,9 @@ function nextQuestion() {
         document.getElementById('answer3').style.filter = "none";
         document.getElementById('answer4').style.filter = "none";
 
+        // Oculta o card de explicação ao mostrar ranking
+        document.getElementById('explanationCard').style.display = 'none';
+
         // Monta e mostra o ranking dentro do card-question
         var cardQuestion = document.querySelector('.card-question');
         cardQuestion.innerHTML = '<h3>Ranking após rodada</h3><ol style="padding-left: 20px;"></ol>';
@@ -221,14 +232,6 @@ function nextQuestion() {
             li.textContent = (idx + 1) + '. ' + player.name + ': ' + player.gameData.score + ' pontos';
             ol.appendChild(li);
         });
-
-        // Mostra o card de explicação se houver conteúdo
-        if (currentExplanation && currentExplanation.trim() !== "") {
-            document.getElementById('explanationCard').style.display = 'block';
-            document.getElementById('explanation').innerHTML = currentExplanation;
-        } else {
-            document.getElementById('explanationCard').style.display = 'none';
-        }
 
         // Atualiza botão avançar
         document.getElementById('btn-cover').style.display = 'block';
