@@ -27,6 +27,9 @@ socket.on('gameQuestions', function (data) {
     playerDataGlobal = [];
     currentCorrectAnswer = 0;
     currentExplanation = data.explanation || "";
+
+    // Oculta o card de explicação
+    document.getElementById('explanationCard').style.display = 'none';
     document.getElementById('explanation').innerHTML = "";
 
     // Atualiza o número da questão e total de questões
@@ -219,10 +222,13 @@ function nextQuestion() {
             ol.appendChild(li);
         });
 
-        // Atualiza o explanation dinâmico com delay para garantir renderização
-        setTimeout(function () {
+        // Mostra o card de explicação se houver conteúdo
+        if (currentExplanation && currentExplanation.trim() !== "") {
+            document.getElementById('explanationCard').style.display = 'block';
             document.getElementById('explanation').innerHTML = currentExplanation;
-        }, 0);
+        } else {
+            document.getElementById('explanationCard').style.display = 'none';
+        }
 
         // Atualiza botão avançar
         document.getElementById('btn-cover').style.display = 'block';

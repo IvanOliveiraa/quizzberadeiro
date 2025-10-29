@@ -8,6 +8,21 @@ const socketIO = require('socket.io');
 const { LiveGames } = require('./utils/liveGames');
 const { Players } = require('./utils/players');
 
+//Function to select random questions (max 5)
+function selectRandomQuestions(totalQuestions, maxQuestions = 5) {
+    const numQuestions = Math.min(totalQuestions, maxQuestions);
+    const allIndices = Array.from({ length: totalQuestions }, (_, i) => i);
+    const selectedIndices = [];
+
+    for (let i = 0; i < numQuestions; i++) {
+        const randomIndex = Math.floor(Math.random() * allIndices.length);
+        selectedIndices.push(allIndices[randomIndex]);
+        allIndices.splice(randomIndex, 1);
+    }
+
+    return selectedIndices.sort((a, b) => a - b);
+}
+
 const publicPath = path.join(__dirname, '../public');
 var app = express();
 var server = http.createServer(app);
@@ -91,13 +106,20 @@ io.on('connection', (socket) => {
                 dbo.collection("kahootGames").find(query).toArray(function (err, res) {
                     if (err) throw err;
 
-                    var question = res[0].questions[0].question;
-                    var answer1 = res[0].questions[0].answers[0];
-                    var answer2 = res[0].questions[0].answers[1];
-                    var answer3 = res[0].questions[0].answers[2];
-                    var answer4 = res[0].questions[0].answers[3];
-                    var correctAnswer = res[0].questions[0].correct;
-                    var explanationQuestion = res[0].questions[0].explanation;
+                    //Select random questions (max 5) for this game session
+                    var totalQuestions = res[0].questions.length;
+                    var selectedQuestions = selectRandomQuestions(totalQuestions, 5);
+                    game.gameData.selectedQuestions = selectedQuestions;
+
+                    //Get first question using selected index
+                    var firstQuestionIndex = selectedQuestions[0];
+                    var question = res[0].questions[firstQuestionIndex].question;
+                    var answer1 = res[0].questions[firstQuestionIndex].answers[0];
+                    var answer2 = res[0].questions[firstQuestionIndex].answers[1];
+                    var answer3 = res[0].questions[firstQuestionIndex].answers[2];
+                    var answer4 = res[0].questions[firstQuestionIndex].answers[3];
+                    var correctAnswer = res[0].questions[firstQuestionIndex].correct;
+                    var explanationQuestion = res[0].questions[firstQuestionIndex].explanation;
 
                     socket.emit('gameQuestions', {
                         q1: question,
@@ -109,7 +131,7 @@ io.on('connection', (socket) => {
                         explanation: explanationQuestion,
                         playersInGame: playerData.length,
                         currentQuestionNumber: game.gameData.question,
-                        totalQuestions: res[0].questions.length
+                        totalQuestions: selectedQuestions.length
                     });
                     db.close();
                 });
@@ -236,7 +258,9 @@ io.on('connection', (socket) => {
                 var query = { id: parseInt(gameid) };
                 dbo.collection("kahootGames").find(query).toArray(function (err, res) {
                     if (err) throw err;
-                    var correctAnswer = res[0].questions[gameQuestion - 1].correct;
+                    //Use selected question index
+                    var questionIndex = game.gameData.selectedQuestions[gameQuestion - 1];
+                    var correctAnswer = res[0].questions[questionIndex].correct;
                     //Checks player answer with correct answer
                     if (num == correctAnswer) {
                         player.gameData.score += 100;
@@ -296,7 +320,9 @@ io.on('connection', (socket) => {
             var query = { id: parseInt(gameid) };
             dbo.collection("kahootGames").find(query).toArray(function (err, res) {
                 if (err) throw err;
-                var correctAnswer = res[0].questions[gameQuestion - 1].correct;
+                //Use selected question index
+                var questionIndex = game.gameData.selectedQuestions[gameQuestion - 1];
+                var correctAnswer = res[0].questions[questionIndex].correct;
                 io.to(game.pin).emit('questionOver', playerData, correctAnswer);
 
                 db.close();
@@ -329,16 +355,19 @@ io.on('connection', (socket) => {
             dbo.collection("kahootGames").find(query).toArray(function (err, res) {
                 if (err) throw err;
 
-                if (res[0].questions.length >= game.gameData.question) {
+                //Check if there are more questions in the selected questions array
+                if (game.gameData.selectedQuestions.length >= game.gameData.question) {
                     var questionNum = game.gameData.question;
                     questionNum = questionNum - 1;
-                    var question = res[0].questions[questionNum].question;
-                    var answer1 = res[0].questions[questionNum].answers[0];
-                    var answer2 = res[0].questions[questionNum].answers[1];
-                    var answer3 = res[0].questions[questionNum].answers[2];
-                    var answer4 = res[0].questions[questionNum].answers[3];
-                    var correctAnswer = res[0].questions[questionNum].correct;
-                    var explanationQuestion = res[0].questions[questionNum].explanation;
+                    //Use selected question index
+                    var questionIndex = game.gameData.selectedQuestions[questionNum];
+                    var question = res[0].questions[questionIndex].question;
+                    var answer1 = res[0].questions[questionIndex].answers[0];
+                    var answer2 = res[0].questions[questionIndex].answers[1];
+                    var answer3 = res[0].questions[questionIndex].answers[2];
+                    var answer4 = res[0].questions[questionIndex].answers[3];
+                    var correctAnswer = res[0].questions[questionIndex].correct;
+                    var explanationQuestion = res[0].questions[questionIndex].explanation;
 
                     socket.emit('gameQuestions', {
                         q1: question,
@@ -350,7 +379,7 @@ io.on('connection', (socket) => {
                         explanation: explanationQuestion,
                         playersInGame: playerData.length,
                         currentQuestionNumber: game.gameData.question,
-                        totalQuestions: res[0].questions.length
+                        totalQuestions: game.gameData.selectedQuestions.length
                     });
                     db.close();
                 } else {
